@@ -46,8 +46,13 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
-
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -59,8 +64,13 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setLong(1, id);
 
             preparedStatement.executeUpdate();
-
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -79,7 +89,13 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setAge(resultSet.getByte("age"));
                 users.add(user);
             }
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
         return users;
